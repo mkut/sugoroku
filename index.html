@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dice Game</title>
+
+	<link href="style.css" rel="stylesheet" type="text/css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="core.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="main">
+			<div id="status-line">
+				<div>
+					<div class="status">
+						<span>you:</span>
+						<span id="position">0</span>
+					</div>
+					<div class="status">
+						<span>opponent:</span>
+						<span id="opponent">0</span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div>
+					<div class="status">
+						<span>1:</span>
+						<span id="forbid-1">0</span>
+					</div>
+					<div class="status">
+						<span>2:</span>
+						<span id="forbid-2">0</span>
+					</div>
+					<div class="status">
+						<span>3:</span>
+						<span id="forbid-3">0</span>
+					</div>
+					<div class="status">
+						<span>4:</span>
+						<span id="forbid-4">0</span>
+					</div>
+					<div class="status">
+						<span>5:</span>
+						<span id="forbid-5">0</span>
+					</div>
+					<div class="status">
+						<span>6:</span>
+						<span id="forbid-6">0</span>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div id="skill-line">
+				<div id="skill-0" class="skill">Manip+<span class="skill-level">Lv 0</span></div>
+				<div id="skill-1" class="skill">Manip-<span class="skill-level">Lv 0</span></div>
+				<div id="skill-2" class="skill">Move<span class="skill-level">Lv 0</span></div>
+				<div class="clear"></div>
+			</div>
+			<div id="dice-line">
+			</div>
+			<div id="event-list">
+			</div>
+			<div id="log">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

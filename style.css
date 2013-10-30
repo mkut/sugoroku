@@ -1,0 +1,69 @@
+div#wrapper {
+	width: 540px;
+	margin: auto;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+div#status-line {
+	border: 1px solid black;
+	margin: 5px 0px;
+}
+div#skill-line {
+	margin: 5px 0px;
+}
+div#dice-line {
+	margin: 5px 0px;
+}
+
+div#dice-roll-button {
+	border: 1px solid black;
+	height: 28px;
+	line-height: 28px;
+	padding: 0px 5px;
+	margin: 0px 5px;
+	float: left;
+}
+
+div.status {
+	height: 24px;
+	line-height: 24px;
+	margin: 0px 10px;
+	float: left;
+}
+div.skill {
+	border: 1px solid black;
+	margin: 0px 10px;
+	height: 36px;
+	line-height: 36px;
+	width: 140px;
+	text-align: center;
+	float: left;
+}
+div.skill-activated {
+	background: #fcc;
+}
+div.dice {
+	border: 1px solid black;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	margin: 0px 5px;
+	text-align: center;
+	float: left;
+}
+div.dice-disabled {
+	background: #ccc;
+}
+div.event {
+	border: 1px solid black;
+	margin: 3px 5px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+}
+.clear {
+	clear: both;
+}
