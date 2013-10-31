@@ -1,4 +1,10 @@
 $(function() {
-	$Dice.roll();
-	$(document).ready($Skill.load);
+	$(document).ready(function() {
+		$Game.init();
+		$Game.skill.onLoad();
+
+		$Handler.add($DOM);
+
+		$Game.dice.roll();
+	});
 });

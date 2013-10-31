@@ -1,127 +1,117 @@
 var $Skill = {
-	SKILL_NONE: 0,
-	SKILL_PLUS: 1,
-	SKILL_MINUS: 2,
-	SKILL_MOVE: 3,
-	SKILL_MOVE2: 4,
-	skillMode: 0,
-	incCount: 0,
-	decCount: 0,
+	NONE: 0,
+	PLUS: 1,
+	MINUS: 2,
+	MOVE: 3,
+	MOVE2: 4,
+};
 
-	skillLevel: [undefined, 0, 0, 0],
-	levelUp: function() {
+function Skill() {
+	this.skillLevel = [undefined, 0, 0, 0];
+
+	this.skillMode = 0;
+	this.incCount = 0;
+	this.decCount = 0;
+
+	this.levelUp = function() {
 		for (var i = 1; i <= 3; i++) {
 			this.skillLevel[i] += 1;
-			this.skillLevelUpdated(i);
+			$Handler.skillLevelUpdated.fire(i, this.skillLevel[i]);
 		}
-	},
-	addLevel: function(skillId, value) {
+	};
+	this.addLevel = function(skillId, value) {
 		this.skillLevel[skillId] = Math.max(0, this.skillLevel[skillId] + value);
-		this.skillLevelUpdated(skillId);
-	},
+		$Handler.skillLevelUpdated.fire(skillId, this.skillLevel[skillId]);
+	};
 
-	load: function() {
+	this.onLoad = function() {
 		for (var i = 1; i <= 3; i++) {
-			$("#skill-" + i).click($Skill.selectSkillFnc(i));
+			$("#skill-" + i).click($Game.skill.selectSkillFnc(i));
 		}
-	},
+	};
 
-	selectSkillFnc: function(skillId) {
+	this.selectSkillFnc = function(skillId) {
 		return function() {
-			$Skill.selectSkill(skillId);
+			$Game.skill.selectSkill(skillId);
 		};
-	},
+	};
 
-	selectSkill: function(skillId) {
-		if (this.skillLevel[skillId] > 0 && this.skillMode == this.SKILL_NONE) {
+	this.selectSkill = function(skillId) {
+		if (this.skillLevel[skillId] > 0 && this.skillMode == $Skill.NONE) {
 			this.skillMode = skillId;
-			if (skillId == this.SKILL_PLUS) {
+			if (skillId == $Skill.PLUS) {
 				this.incCount = this.skillLevel[skillId];
 			} else {
 				this.decCount = this.skillLevel[skillId];
 			}
 			this.skillLevel[skillId] -= 1;
-			this.skillStarted(skillId);
-			this.skillLevelUpdated(skillId);
-			if ($Dice.all(6) && skillId == this.SKILL_PLUS) {
-				this.skillMode = this.SKILL_NONE;
-				this.skillFinished(skillId);
-			} else if ($Dice.all(1) && (skillId == this.SKILL_MINUS || skillId == this.SKILL_MOVE)) {
-				this.skillMode = this.SKILL_NONE;
-				this.skillFinished(skillId);
+			$Handler.skillStarted.fire(skillId);
+			$Handler.skillLevelUpdated.fire(skillId, this.skillLevel[skillId]);
+			if ($Game.dice.all(6) && skillId == $Skill.PLUS) {
+				this.skillMode = $Skill.NONE;
+				$Handler.skillFinished.fire(skillId);
+			} else if ($Game.dice.all(1) && (skillId == $Skill.MINUS || skillId == $Skill.MOVE)) {
+				this.skillMode = $Skill.NONE;
+				$Handler.skillFinished.fire(skillId);
 			}
-		} else if (skillId == this.SKILL_MINUS && this.skillMode == this.SKILL_MINUS) {
-			this.skillMode = this.SKILL_NONE;
-			this.skillFinished(skillId);
+		} else if (skillId == $Skill.MINUS && this.skillMode == $Skill.MINUS) {
+			this.skillMode = $Skill.NONE;
+			$Handler.skillFinished.fire(skillId);
 		}
-	},
-	selectDice: function(ix) {
+	};
+	this.selectDice = function(ix) {
 		switch (this.skillMode) {
-			case this.SKILL_NONE:
+			case $Skill.NONE:
 				$Turn.exec(ix);
 				break;
-			case this.SKILL_PLUS:
-				var res = $Dice.inc(ix);
+			case $Skill.PLUS:
+				var res = $Game.dice.inc(ix);
 				if (res) {
 					this.incCount -= 1;
 				} else {
 					// show msg
 				}
-				if (this.incCount == 0 || $Dice.all(6)) {
-					this.skillMode = this.SKILL_NONE;
-					this.skillFinished(this.SKILL_PLUS);
+				if (this.incCount == 0 || $Game.dice.all(6)) {
+					this.skillMode = $Skill.NONE;
+					$Handler.skillFinished.fire($Skill.PLUS);
 				}
 				break;
-			case this.SKILL_MINUS:
-				var res = $Dice.dec(ix);
+			case $Skill.MINUS:
+				var res = $Game.dice.dec(ix);
 				if (res) {
 					this.decCount -= 1;
 				} else {
 					// show msg
 				}
-				if (this.decCount == 0) {
-					this.skillMode = this.SKILL_NONE;
-					this.skillFinished(this.SKILL_MINUS);
+				if (this.decCount == 0 || $Game.dice.all(1)) {
+					this.skillMode = $Skill.NONE;
+					$Handler.skillFinished.fire($Skill.MINUS);
 				}
 				break;
-			case this.SKILL_MOVE:
-				var res = $Dice.dec(ix);
+			case $Skill.MOVE:
+				var res = $Game.dice.dec(ix);
 				if (res) {
 					this.decCount -= 1;
 					this.incCount += 1;
 				} else {
 					// show msg
 				}
-				if (this.decCount == 0) {
-					this.skillMode = this.SKILL_MOVE2;
+				if (this.decCount == 0 || $Game.dice.all(1)) {
+					this.skillMode = $Skill.MOVE2;
 				}
 				break;
-			case this.SKILL_MOVE2:
-				var res = $Dice.inc(ix);
+			case $Skill.MOVE2:
+				var res = $Game.dice.inc(ix);
 				if (res) {
 					this.incCount -= 1;
 				} else {
 					// show msg
 				}
 				if (this.incCount == 0) {
-					this.skillMode = this.SKILL_NONE;
-					this.skillFinished(this.SKILL_MOVE);
+					this.skillMode = $Skill.NONE;
+					$Handler.skillFinished.fire($Skill.MOVE);
 				}
 				break;
 		}
-	},
-
-	// DOM
-	skillStarted: function(skillId) {
-		$("#skill-" + skillId).addClass("skill-activated");
-	},
-	skillFinished: function(skillId) {
-		$("#skill-" + skillId).removeClass("skill-activated");
-	},
-	skillLevelUpdated: function(skillId, value) {
-		if (value === undefined) {
-			value = this.skillLevel[skillId];
-		}
-		$("#skill-" + skillId + " .skill-level").text("Lv " + value);
-	}
+	};
 };

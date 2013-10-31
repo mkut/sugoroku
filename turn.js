@@ -2,33 +2,33 @@ var $Turn = {
 	exec: function(ix) {
 		move();
 
-		if ($Position.terminated()) {
-			console.log("score: " + $Position.you);
-			alert("score: " + $Position.you);
-			//$Game.initialize();
+		if ($Game.terminated()) {
+			console.log("score: " + $Game.you.pos);
+			alert("score: " + $Game.you.pos);
+			$Game.init();
 			return;
 		}
 
 		addDice();
-		$Dice.decProhibition();
+		$Game.dice.decProhibition();
 		prohibit();
-		$Skill.levelUp();
-		$Event.at($Position.you);
-		$Dice.roll();
+		$Game.skill.levelUp();
+		$Event.at($Game.you.pos);
+		$Game.dice.roll();
 
 		function move() {
-			var ds = $Dice.dices;
+			var ds = $Game.dice.dices;
 			for (var i = 0; i < ds.length; i++) {
 				var d = ds[i];
 				if (i == ix) {
-					$Position.add($Position.OPPONENT, d);
-				} else if (!$Dice.prohibited(d)) {
-					$Position.add($Position.YOU, d);
+					$Game.opp.add(d);
+				} else if (!$Game.dice.prohibited(d)) {
+					$Game.you.add(d);
 				}
 			}
 		}
 		function addDice() {
-			var ds = $Dice.dices;
+			var ds = $Game.dice.dices;
 			var matching = undefined;
 			for (var i = 0; i < ds.length; i++) {
 				var d = ds[i];
@@ -41,21 +41,21 @@ var $Turn = {
 				}
 			}
 			if (matching != false) {
-				$Dice.addDices(1);
+				$Game.dice.addDices(1);
 			}
 		}
 		function prohibit() {
-			var ds = $Dice.dices;
+			var ds = $Game.dice.dices;
 			var diceUsed = [undefined, false, false, false, false, false, false];
 			for (var i = 0; i < ds.length; i++) {
 				var d = ds[i];
-				if (i != ix && !$Dice.prohibited(d)) {
+				if (i != ix && !$Game.dice.prohibited(d)) {
 					diceUsed[d] = true;
 				}
 			}
 			for (var i = 1; i <= 6; i++) {
 				if (diceUsed[i]) {
-					$Dice.prohibit(i);
+					$Game.dice.prohibit(i);
 				}
 			}
 		}

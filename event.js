@@ -1,9 +1,7 @@
 var $Event = {
-	nextLvMod: 0,
-
 	at: function(n) {
-		var currentLvMod = this.nextLvMod;
-		this.nextLvMod = 0;
+		var currentLvMod = $Game.nextLvMod;
+		$Game.nextLvMod = 0;
 		$("#event-list").empty(); // TODO separate DOM manipulation
 		var f = factor(n);
 		for (var key in f) {
@@ -42,25 +40,25 @@ var $Event = {
 	occur: function(eventId, lv) {
 		switch (eventId) {
 			case 0:
-				$Skill.addLevel(1, -lv);
+				$Game.skill.addLevel(1, -lv);
 				break;
 			case 1:
-				$Skill.addLevel(2, -lv);
+				$Game.skill.addLevel(2, -lv);
 				break;
 			case 2:
-				$Skill.addLevel(3, -lv);
+				$Game.skill.addLevel(3, -lv);
 				break;
 			case 3:
-				$Dice.addDices(-lv);
+				$Game.dice.addDices(-lv);
 				break;
 			case 4:
-				$Dice.incProhibition();
+				$Game.dice.incProhibition();
 				break;
 			case 5:
-				$Position.add($Position.YOU, -lv);
+				$Game.you.add(-lv);
 				break;
 			case 6:
-				this.nextLvMod += lv;
+				$Game.nextLvMod += lv;
 				break;
 		}
 	},
