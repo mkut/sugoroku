@@ -6,11 +6,11 @@ var $Event = {
 		var f = factor(n);
 		for (var key in f) {
 			var lv = f[key] + currentLvMod;
-			var ev = Math.floor(Math.random() * 7);
-			this.occur(ev, lv);
+			var ev = Math.floor(Math.random() * this.allEvent.length);
+			this.allEvent[ev].effect(lv);
 			$("<div/>")
 				.addClass("event")
-				.text(this.text(ev, lv))
+				.text(textFormat(this.allEvent[ev].text, lv))
 				.appendTo($("#event-list"));
 		}
 
@@ -35,33 +35,24 @@ var $Event = {
 			}
 			return ret;
 		}
-	},
 
-	occur: function(eventId, lv) {
-		switch (eventId) {
-			case 0:
-				$Game.skill.addLevel(1, -lv);
-				break;
-			case 1:
-				$Game.skill.addLevel(2, -lv);
-				break;
-			case 2:
-				$Game.skill.addLevel(3, -lv);
-				break;
-			case 3:
-				$Game.dice.addDices(-lv);
-				break;
-			case 4:
-				$Game.dice.incProhibition();
-				break;
-			case 5:
-				$Game.you.add(-lv);
-				break;
-			case 6:
-				$Game.nextLvMod += lv;
-				break;
+		function textFormat(text, lv) {
+			return text + " [" + lv + "]";
 		}
 	},
+
+	allEvent: [
+		{effect: function(lv) {
+				for (var i = 1; i <= 3; i++) {
+					$Game.skill.addLevel(i, -lv);
+				}
+			}, text: "Skill level decreased"},
+		{effect: function(lv) {$Game.dice.addDices(-lv);}, text: "Dice decreased"},
+		{effect: function(lv) {$Game.dice.incProhibition(lv);}, text: "Extended prohibition"},
+		{effect: function(lv) {$Game.you.add(-(lv * lv));}, text: "Moved back"},
+		{effect: function(lv) {$Game.nextLvMod += lv;}, text: "Event level increased (next turn)"},
+	],
+
 	text: function(eventId, lv) {
 		switch (eventId) {
 			case 0:

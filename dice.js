@@ -27,10 +27,10 @@ function Dice() {
 		}
 		$Handler.prohibitionUpdated.fire();
 	};
-	this.incProhibition = function() {
+	this.incProhibition = function(n) {
 		for (var i = 1; i <= 6; i++) {
 			if (this.prohibition[i] > 0) {
-				this.prohibition[i] += 1;
+				this.prohibition[i] += n;
 			}
 		}
 		$Handler.prohibitionUpdated.fire();

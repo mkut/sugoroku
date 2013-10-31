@@ -51,6 +51,6 @@ var $DOM = {
 		$("#skill-" + skillId).removeClass("skill-activated");
 	},
 	skillLevelUpdated: function(skillId, value) {
-		$("#skill-" + skillId + " .skill-level").text("Lv " + value);
+		$("#skill-" + skillId + " .skill-level").text("Lv" + value);
 	},
 };
